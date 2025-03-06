@@ -95,7 +95,6 @@ const AppRoutes = () => {
     }
   }, [dispatch, isLoggedIn]);
 
-  console.log(JSON.stringify({ user }, null, 2));
 
   return (
     <Routes>
