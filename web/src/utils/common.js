@@ -36,9 +36,10 @@ export const toInr = (totalAmount, maximumFractionDigits = 2) => {
 export const getUserFromLocalStorage = () => {
   let userData = {};
   try {
-    userData = JSON.parse(localStorage.getItem("user-kosmossolution") || {}) || {};
+    const storedUser = localStorage.getItem("user-kosmossolution");
+    userData = storedUser ? JSON.parse(storedUser) : {};
   } catch (error) {
-    console.error(error);
+    console.error("Error parsing user data from localStorage:", error);
   }
   return userData;
 };
