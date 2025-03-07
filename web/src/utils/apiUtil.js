@@ -26,6 +26,7 @@ export const createApiClientWithTransForm = (baseURL) => {
     baseURL,
     headers: { "Content-Type": "application/json" }
   });
+
   api.addResponseTransform((response) => {
     const { ok, data, status } = response;
     if (status === 401) {
@@ -39,21 +40,23 @@ export const createApiClientWithTransForm = (baseURL) => {
   });
 
   api.addRequestTransform((request) => {
-    // const { data } = request;
     let token = null;
     try {
-      token = JSON.parse(localStorage.getItem("user-kosmossolution")).token;
+      const userData = JSON.parse(localStorage.getItem("user-kosmossolution") || "{}");
+      token = userData?.token || null; // Ensure token is safely extracted
     } catch (error) {
-      console.error(error);
+      console.error("Error parsing localStorage data:", error);
     }
+
     if (token) {
       request.headers["x-auth-token"] = `Bearer ${token}`;
+    } else {
+      console.warn("No token found in localStorage");
     }
-    // if (data) {
-    //   request.data = mapKeysDeep(data, (keys) => snakeCase(keys));
-    // }
+
     return request;
   });
+
   return api;
 };
 

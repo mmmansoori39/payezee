@@ -61,7 +61,7 @@ export const register = async (req, res) => {
 export const loginWithGoogle = async (req, res) => {
   try {
     const token = req.body.token;
-    
+
     if (!token) {
       return commonResponse(
         res,
@@ -74,7 +74,21 @@ export const loginWithGoogle = async (req, res) => {
     const ticket = await googleClient.verifyIdToken({
       idToken: token,
       audience: process.env.GOOGLE_AUTH_CLIENT_ID
+    }).catch((err) => {
+      console.error("Google Token Verification Error:", err);
+      return null;
     });
+
+    if (!ticket) {
+      return commonResponse(
+        res,
+        HTTPCode.UNAUTHORIZED,
+        ErrorMessage.error,
+        "Google token verification failed",
+        null
+      );
+    }
+
     const { name, email, picture } = ticket.getPayload();
 
     let user = null;
@@ -91,7 +105,7 @@ export const loginWithGoogle = async (req, res) => {
     }
 
     console.log(user);
-    
+
 
     if (!user) {
       return commonResponse(
@@ -188,7 +202,7 @@ export const merchantLogin = async (req, res) => {
   try {
     const contactEmail = req.body.email;
     const password = req.body.password;
-    
+
     const user = await merchantMasterService.getMerchantByEmail(contactEmail);
     console.log({ user });
     if (user && password === user.password) {
