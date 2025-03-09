@@ -87,7 +87,6 @@ const AppRoutes = () => {
   useEffect(() => {
     if (isLoggedIn) {
       getUser().then((res) => {
-        console.log({ res });
         if (res.data?.responseData?.email) {
           dispatch(setUser(res.data.responseData));
         }

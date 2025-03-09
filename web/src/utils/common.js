@@ -1,7 +1,7 @@
 import { toast } from "react-toastify";
 
 export const isValidEmail = (mail) => {
-  if (/^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/.test(mail)) {
+  if (/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i.test(mail)) {
     return true;
   }
   return false;

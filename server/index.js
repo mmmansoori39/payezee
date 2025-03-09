@@ -16,6 +16,26 @@ const allowedAppOrigin = process.env.ALLOWED_APP_ORIGIN;
 
 app.use(cors({ origin: allowedAppOrigin }));
 
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true
+  })
+);
+app.use(
+  cors({
+    origin: "https://api.indipayments.in",
+    credentials: true
+  })
+);
+
+app.use((req, res, next) => {
+  res.setHeader("Cross-Origin-Opener-Policy", "same-origin-allow-popups");
+  res.setHeader("Cross-Origin-Embedder-Policy", "require-corp");
+  next();
+});
+
+
 // Add headers
 app.use(function (req, res, next) {
   res.setHeader("Access-Control-Allow-Origin", allowedAppOrigin);
